@@ -18,6 +18,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import axios from 'axios';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 export default class Moviesinfo extends Component {
     constructor(props){
@@ -37,6 +40,8 @@ export default class Moviesinfo extends Component {
             Movie_Id:"1",
             Movie_Data:[],
             Login_Status:false,
+            err_modal:false,
+            spane:'',
         }
     }
     componentDidMount=()=>{
@@ -100,24 +105,33 @@ export default class Moviesinfo extends Component {
         else{
 
             this.setState({
+                spane:'',
                 [e.target.name]:e.target.value
             })
         }
     }
     addMovie=()=>{
-        let data={
-            Id:this.state.Movie_Id,
-            Title:this.state.Movie_Title,
-            Type:this.state.Movie_Type,
-            Img:this.state.Movie_Img
+        if(this.state.Title!=''&& this.state.Type!=''&& this.state.Movie_Img!=""){
+            let data={
+                Id:this.state.Movie_Id,
+                Title:this.state.Movie_Title,
+                Type:this.state.Movie_Type,
+                Img:this.state.Movie_Img
+            }
+            this.state.Movie_Array.push(data)
+            this.setState({
+                Movie_Id:Number(this.state.Movie_Id)+1,
+                Modal_open:false,
+                Movie_Title:'',
+                Movie_Type:'',
+            })
         }
-        this.state.Movie_Array.push(data)
-        this.setState({
-            Movie_Id:Number(this.state.Movie_Id)+1,
-            Modal_open:false,
-            Movie_Title:'',
-            Movie_Type:'',
-        })
+        else{
+            this.setState({
+                spane:"Invalid"
+                
+            })
+        }
     }
     editMovie=(Id)=>{
         this.state.Movie_Array.map((e,i)=>{
@@ -145,21 +159,33 @@ export default class Moviesinfo extends Component {
     }
     onSearch=(e)=>{
         this.setState({
-            [e.target.name]:e.target.value
+            [e.target.name]:e.target.value,
+            
         })
     }
     axiosSearch=()=>{
         this.setState({Movie_Data:''})
         axios.get(`https://www.omdbapi.com/?i=tt3896198&apikey=504c060f&s=${this.state.Search}`)
         .then(response =>{
-            this.setState({Movie_Data: response.data.Search, Search:'',Tabvalue:1})
+            if(response.data.Response==="True"){
+                this.setState({Movie_Data: response.data.Search, Search:'',Tabvalue:1})
+            }
+            else if(response.data.Response=== "False"){
+                this.setState({
+                    err_modal:true
+                })
+                
+            }
         })
-        .catch(err => {
-           alert("hello")
+
+    }
+    errModal=()=>{
+        this.setState({
+            err_modal:false
         })
     }
     render() {
-        console.log(this.state.Login_Status)
+        console.log(this.state.err_modal)
         return (
             <div>
                 {
@@ -171,7 +197,7 @@ export default class Moviesinfo extends Component {
                             <NavApp/>
                         </div>
                         <div className={Style.title}>
-                            <h3 style={{fontSize:'40px', fontWeight:"900"}}>{this.state.Title}</h3>
+                            <h3 className={Style.title_heading}>{this.state.Title}</h3>
                             <p>{this.state.Type}</p>
                         </div>
                         <div className={Style.movie_card}>
@@ -217,6 +243,9 @@ export default class Moviesinfo extends Component {
                                             </IconButton>
                                         </div>
                                         <DialogContent dividers className={Style.modal_content}>
+                                        <div style={{marginLeft:"45%", color:"red"}}>
+                                                <spane>{this.state.spane}</spane>
+                                            </div>
                                             <div className={Style.input_arrng}>
                                                 <lable>Movie Title:</lable>
                                                 <input placeholder="Search Movie" className={Style.text_area} value={this.state.Movie_Title} name="Movie_Title" onChange={this.handleChange}></input>
@@ -344,7 +373,27 @@ export default class Moviesinfo extends Component {
                 <div className={Style.not_auth}>
                     <p style={{textAlign:"center"}}>**You are not Authorise, please login your account</p>
                 </div>
-                }
+                } 
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={Style.err_modal}
+                    open={this.state.err_modal}
+                    onClose={this.errModal}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                    timeout: 500,
+                    }}
+                    >
+                    <Fade in={this.state.err_modal}>
+                    <div className={Style.paper}>
+                        <h4 id="transition-modal-title">Movie Search</h4>
+                        <p id="transition-modal-description">Sorry, Movie is not found</p>
+                        <Button color="primary" onClick={this.errModal}>close</Button>
+                    </div>
+                    </Fade>
+                </Modal>
             </div>
         )
     }

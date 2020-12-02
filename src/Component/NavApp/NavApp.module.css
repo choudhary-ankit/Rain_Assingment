@@ -48,4 +48,11 @@
         border: 1px solid #e50914;
         border-radius: 5px;
     }
+    .login_arrng{
+        width: 150px;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 }
