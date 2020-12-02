@@ -248,15 +248,15 @@ export default class Moviesinfo extends Component {
                                             </div>
                                             <div className={Style.input_arrng}>
                                                 <lable>Movie Title:</lable>
-                                                <input placeholder="Search Movie" className={Style.text_area} value={this.state.Movie_Title} name="Movie_Title" onChange={this.handleChange}></input>
+                                                <input placeholder="Movie Title" className={Style.text_area} value={this.state.Movie_Title} name="Movie_Title" onChange={this.handleChange}></input>
                                             </div>
                                             <div className={Style.input_arrng}>
                                                 <lable>Movie Type:</lable>
-                                                <input placeholder="Search Movie" className={Style.text_area} value={this.state.Movie_Type} name="Movie_Type" onChange={this.handleChange}></input>
+                                                <input placeholder="Type: Action | Comedy" className={Style.text_area} value={this.state.Movie_Type} name="Movie_Type" onChange={this.handleChange}></input>
                                             </div>
                                             <div className={Style.input_arrng}>
                                                 <lable>Movie image:</lable>
-                                                <input placeholder="Search Movie" style={{width:"200px"}} type="file"  name="Movie_Img" onChange={this.handleChange}></input>
+                                                <input placeholder="movie image" style={{width:"200px"}} type="file"  name="Movie_Img" onChange={this.handleChange}></input>
                                             </div>
                                         </DialogContent>
                                         <DialogActions>
