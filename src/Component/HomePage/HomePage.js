@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Style from './HomePage.module.css'
 import NavApp from '../NavApp/NavApp'
 
+
 export default class HomePage extends Component {
     render() {
         return (

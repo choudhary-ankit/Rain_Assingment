@@ -20,6 +20,14 @@
     outline: none;
     border: 1px solid #e50914;
     border-radius: 5px;
+    cursor: pointer;
+}
+.login_arrng{
+    width: 250px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 @media only screen and (max-width: 600px){
     .navapp_arrng{
